@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import useSWR from 'swr';
 import { fetcher } from '../../client/util';
 import { withRedux } from '../../client/middlewares/redux';
-import { withAuth } from '../../client/middlewares/auth'; 
 import axios from 'axios';
 
 import Layout from '../../client/components/Layout';
@@ -19,11 +18,9 @@ import ReloadButton from '../../client/components/apps/ReloadButton';
 import ClusterIcon from '../../client/components/ClusterIcon';
 import InstancesList from '../../client/components/apps/InstancesList';
 import { IGlobalState } from '../../client/store';
-import { UserAppRight } from '../../shared/user';
 
-export default withRedux(withAuth(function() {
+export default withRedux(function() {
   const isMounted = useRef(true);
-  const client = useSelector((state: IGlobalState) => state.client);
   const [isWaiting, setWaiting] = useState(false);
   const [warning, setWarning] = useState(null);
   const router = useRouter();
@@ -44,10 +41,8 @@ export default withRedux(withAuth(function() {
       </Layout>
     );
   }
-
-  const appRights = client.apps.find(a => a.id === id)?.right ?? 0;
-  const canManage = client.isAdmin || (appRights & UserAppRight.MANAGE) === UserAppRight.MANAGE;
-  const canDelete = client.isAdmin || (appRights & UserAppRight.DELETE) === UserAppRight.DELETE;
+  const canManage = true;
+  const canDelete = true;
 
   const { app } = data;
   const { pm_id: pmId, name, exec_mode: execMode, instances } = app as IApp;
@@ -109,4 +104,4 @@ export default withRedux(withAuth(function() {
       <InstancesList apps={instances} />
     </Layout>
   );
-}));
+});

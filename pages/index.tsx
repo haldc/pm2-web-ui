@@ -1,12 +1,11 @@
 import { withRedux } from '../client/middlewares/redux';
-import { withAuth } from '../client/middlewares/auth'; 
 import useSWR from 'swr';
 import { fetcher } from '../client/util';
 
 import ApplicationsTable from '../client/components/ApplicationsTable';
 import Layout from '../client/components/Layout';
 
-export default withRedux(withAuth(function() {
+export default withRedux(function() {
   const { data, error, isValidating, revalidate } = useSWR('/api/apps', fetcher, { refreshInterval: 8000 });
   const canUpdate = !isValidating && (data || error);
 
@@ -28,4 +27,4 @@ export default withRedux(withAuth(function() {
       </div>
     </Layout>
   );
-}));
+});
